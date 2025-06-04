@@ -18,7 +18,7 @@ const checkEditUserUnique = createUniqueCheckMiddleware('user', [
   'username',
   'email',
 ]);
-router.post('/new', checkCreateUserUnique as any, handleCreateUser);
-router.post('/edit/:userId', checkEditUserUnique as any, handleEditUser);
-router.post('/edit/:email', handleGetUserByEmail);
+router.post('/new', handleCreateUser);
+router.post('/edit/:userId', handleEditUser);
+router.get('/:email', handleGetUserByEmail);
 export default router;

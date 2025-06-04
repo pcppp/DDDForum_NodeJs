@@ -30,7 +30,7 @@ export async function createUser(data: {
 }
 
 export async function editUser(
-  userId: number,
+  userId: string,
   data: {
     email: string;
     username: string;
@@ -39,7 +39,7 @@ export async function editUser(
   }
 ) {
   const user = await prisma.user.update({
-    where: { userId },
+    where: { userId: parseInt(userId, 10) },
     data: { ...data },
   });
 
@@ -61,9 +61,21 @@ export async function getUserByEmail(email: string) {
   return { ...user };
 }
 
-export async function isUserIdTaken(userId: number): Promise<boolean> {
+export async function isUserIdTaken(userId: string): Promise<boolean> {
   const user = await prisma.user.findUnique({
-    where: { userId },
+    where: { userId: parseInt(userId, 10) },
+  });
+  return Boolean(user);
+}
+export async function isEmailUnique(email: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+  return Boolean(user);
+}
+export async function isUsernameUnique(username: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: { username },
   });
   return Boolean(user);
 }
