@@ -14,7 +14,7 @@ export async function handleCreateUser(req: Request, res: Response) {
     const user = await createUser({ email, username, firstName, lastName });
     if (!((await isEmailUnique(email)) && (await isUsernameUnique(username)))) {
       res.status(509).json({
-        error: undefined,
+        error: '邮箱或用户名已被使用',
         data: undefined,
         success: false,
       });
@@ -39,7 +39,7 @@ export async function handleEditUser(req: Request, res: Response) {
     const { email, username, firstName, lastName } = req.body;
     if (!((await isEmailUnique(email)) && (await isUsernameUnique(username)))) {
       res.status(509).json({
-        error: undefined,
+        error: '邮箱或用户名已被使用',
         data: undefined,
         success: false,
       });
@@ -47,7 +47,7 @@ export async function handleEditUser(req: Request, res: Response) {
     const userId = req.params.userId;
     if (!(await isUserIdTaken(userId))) {
       res.status(404).json({
-        error: undefined,
+        error: '用户不存在',
         data: undefined,
         success: false,
       });
@@ -78,7 +78,7 @@ export async function handleGetUserByEmail(req: Request, res: Response) {
     const user = await getUserByEmail(email);
     if (!user || !user.userId) {
       res.status(404).json({
-        error: undefined,
+        error: '用户不存在',
         data: undefined,
         success: false,
       });
