@@ -1,14 +1,11 @@
+import { UserController } from '../controllers/userController';
 import { Router } from 'express';
-import {
-  handleCreateUser,
-  handleEditUser,
-  handleGetUserByEmail,
-} from '../controllers/userController';
+
 import {
   createUniqueCheckMiddleware,
   createExistCheckMiddleware,
-} from '../utils/check';
-
+} from '../../../utils/check';
+const userController = new UserController();
 const router = Router();
 const checkCreateUserUnique = createUniqueCheckMiddleware('user', [
   'username',
@@ -18,7 +15,7 @@ const checkEditUserUnique = createUniqueCheckMiddleware('user', [
   'username',
   'email',
 ]);
-router.post('/new', handleCreateUser);
-router.post('/edit/:userId', handleEditUser);
-router.get('/:email', handleGetUserByEmail);
+router.post('/new', userController.handleCreateUser);
+router.post('/edit/:userId', userController.handleEditUser);
+router.get('/:email', userController.handleGetUserByEmail);
 export default router;

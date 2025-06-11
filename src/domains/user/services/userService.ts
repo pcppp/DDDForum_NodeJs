@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { hashPassword, generateRandomPassword } from '../utils/password';
+import { hashPassword, generateRandomPassword } from '../../../utils/password';
 
+// ******************************** 基础设施层(负责数据库的调用) ***********************************
 const prisma = new PrismaClient();
 
 export async function createUser(data: {
@@ -21,7 +22,7 @@ export async function createUser(data: {
   console.log(`✅ 创建用户成功，初始密码为：${rawPassword}`);
 
   return {
-    id: user.userId,
+    id: user.id,
     email: user.email,
     username: user.username,
     firstName: user.firstName,
@@ -39,14 +40,14 @@ export async function editUser(
   }
 ) {
   const user = await prisma.user.update({
-    where: { userId: parseInt(userId, 10) },
+    where: { id: parseInt(userId, 10) },
     data: { ...data },
   });
 
   console.log(`✅ 修改用户成功`);
 
   return {
-    id: user.userId,
+    id: user.id,
     email: user.email,
     username: user.username,
     firstName: user.firstName,
@@ -63,7 +64,7 @@ export async function getUserByEmail(email: string) {
 
 export async function isUserIdTaken(userId: string): Promise<boolean> {
   const user = await prisma.user.findUnique({
-    where: { userId: parseInt(userId, 10) },
+    where: { id: parseInt(userId, 10) },
   });
   return Boolean(user);
 }
@@ -71,6 +72,7 @@ export async function isEmailUnique(email: string): Promise<boolean> {
   const user = await prisma.user.findUnique({
     where: { email },
   });
+
   return Boolean(user);
 }
 export async function isUsernameUnique(username: string): Promise<boolean> {
